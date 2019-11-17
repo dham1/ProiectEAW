@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}HealthCard{% endblock %}
+
+{% block body %}
+    <h1>HealthCard</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ health_card.id }}</td>
+            </tr>
+            <tr>
+                <th>CardNumber</th>
+                <td>{{ health_card.CardNumber }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('health_card_index') }}">back to list</a>
+
+    <a href="{{ path('health_card_edit', {'id': health_card.id}) }}">edit</a>
+
+    {{ include('health_card/_delete_form.html.twig') }}
+{% endblock %}

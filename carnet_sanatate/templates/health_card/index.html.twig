@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}HealthCard index{% endblock %}
+
+{% block body %}
+    <h1>HealthCard index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>CardNumber</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for health_card in health_cards %}
+            <tr>
+                <td>{{ health_card.id }}</td>
+                <td>{{ health_card.CardNumber }}</td>
+                <td>
+                    <a href="{{ path('health_card_show', {'id': health_card.id}) }}">show</a>
+                    <a href="{{ path('health_card_edit', {'id': health_card.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('health_card_new') }}">Create new</a>
+{% endblock %}

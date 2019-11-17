@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}UserDetails index{% endblock %}
+
+{% block body %}
+    <h1>UserDetails index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>FirstName</th>
+                <th>LastName</th>
+                <th>BirthDate</th>
+                <th>Address</th>
+                <th>Phone</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for user_detail in user_details %}
+            <tr>
+                <td>{{ user_detail.id }}</td>
+                <td>{{ user_detail.FirstName }}</td>
+                <td>{{ user_detail.LastName }}</td>
+                <td>{{ user_detail.BirthDate ? user_detail.BirthDate|date('Y-m-d') : '' }}</td>
+                <td>{{ user_detail.Address }}</td>
+                <td>{{ user_detail.Phone }}</td>
+                <td>
+                    <a href="{{ path('user_details_show', {'id': user_detail.id}) }}">show</a>
+                    <a href="{{ path('user_details_edit', {'id': user_detail.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('user_details_new') }}">Create new</a>
+{% endblock %}
