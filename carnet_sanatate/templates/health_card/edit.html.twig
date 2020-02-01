@@ -3,6 +3,8 @@
 {% block title %}Edit HealthCard{% endblock %}
 
 {% block body %}
+    {% include('base.html.twig') %}
+
     <h1>Edit HealthCard</h1>
 
     {{ include('health_card/_form.html.twig', {'button_label': 'Update'}) }}

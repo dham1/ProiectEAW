@@ -19,6 +19,17 @@ class ExaminationRepository extends ServiceEntityRepository
         parent::__construct($registry, Examination::class);
     }
 
+    public function findExaminationsByCardId($value)
+    {
+        return $this->createQueryBuilder('h')
+            ->andWhere('h.HealthCard = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getResult()
+
+            ;
+    }
+
     // /**
     //  * @return Examination[] Returns an array of Examination objects
     //  */

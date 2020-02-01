@@ -19,6 +19,18 @@ class UserAnimalRepository extends ServiceEntityRepository
         parent::__construct($registry, UserAnimal::class);
     }
 
+    public function allAnimalsByUser($value)
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.User = :val')
+            ->setParameter('val', $value)
+            ->orderBy('u.id', 'ASC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+
     // /**
     //  * @return UserAnimal[] Returns an array of UserAnimal objects
     //  */

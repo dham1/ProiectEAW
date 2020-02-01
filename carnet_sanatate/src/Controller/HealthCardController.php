@@ -10,7 +10,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-//era health/card
 /**
  * @Route("/animal/card")
  */
@@ -91,5 +90,16 @@ class HealthCardController extends AbstractController
         }
 
         return $this->redirectToRoute('health_card_index');
+    }
+
+    /**
+     * @Route("/animalId/{Animal}", name="animal_health_card", methods={"GET"})
+     */
+    public function findCardByAnimal(HealthCardRepository $healthCardRepository, $Animal): Response
+    {
+        $animal_card = $healthCardRepository->findCardByAnimalId($Animal);
+        return $this->render('health_card/show_animal_card.html.twig', [
+            'animal_health_card' => $animal_card,
+        ]);
     }
 }

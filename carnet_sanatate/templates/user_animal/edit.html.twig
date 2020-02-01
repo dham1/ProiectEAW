@@ -3,6 +3,8 @@
 {% block title %}Edit UserAnimal{% endblock %}
 
 {% block body %}
+    {% include('base.html.twig') %}
+
     <h1>Edit UserAnimal</h1>
 
     {{ include('user_animal/_form.html.twig', {'button_label': 'Update'}) }}

@@ -91,4 +91,15 @@ class ExaminationController extends AbstractController
 
         return $this->redirectToRoute('examination_index');
     }
+
+    /**
+     * @Route("/cardId/{HealthCard}", name="health_card_examination", methods={"GET"})
+     */
+    public function findExaminationsByCard(ExaminationRepository $examinationRepository, $HealthCard): Response
+    {
+        $examinations = $examinationRepository->findExaminationsByCardId($HealthCard);
+        return $this->render('examination/health_card_examinations.html.twig', [
+            'health_card_examination' => $examinations,
+        ]);
+    }
 }

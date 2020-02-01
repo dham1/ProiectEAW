@@ -19,6 +19,17 @@ class HealthCardRepository extends ServiceEntityRepository
         parent::__construct($registry, HealthCard::class);
     }
 
+    public function findCardByAnimalId($value)
+    {
+        return $this->createQueryBuilder('h')
+            ->andWhere('h.Animal = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getResult()
+
+            ;
+    }
+
     // /**
     //  * @return HealthCard[] Returns an array of HealthCard objects
     //  */

@@ -5,11 +5,14 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @UniqueEntity(fields={"username"}, message="There is already an account with this username")
  */
-class User
+class User implements UserInterface
 {
     /**
      * @ORM\Id()
@@ -37,6 +40,11 @@ class User
      * @ORM\OneToMany(targetEntity="App\Entity\UserAnimal", mappedBy="User", orphanRemoval=true)
      */
     private $UserAnimals;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $username;
 
     public function __construct()
     {
@@ -77,7 +85,7 @@ class User
         return $this->UserDetails;
     }
 
-    public function setUserDetails(UserDetails $UserDetails): self
+    public function setUserDetails(?UserDetails $UserDetails): self
     {
         $this->UserDetails = $UserDetails;
 
@@ -121,5 +129,30 @@ class User
         }
 
         return $this;
+    }
+
+    public function getUsername(): ?string
+    {
+        return $this->username;
+    }
+
+    public function setUsername(string $username): self
+    {
+        $this->username = $username;
+
+        return $this;
+    }
+    public function getSalt()
+    {
+        return null;
+    }
+
+    public function getRoles()
+    {
+        return ['ROLE_USER'];
+    }
+    public function eraseCredentials()
+    {
+        return null;
     }
 }

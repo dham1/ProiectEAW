@@ -3,6 +3,8 @@
 {% block title %}New UserDetails{% endblock %}
 
 {% block body %}
+    {% include('base.html.twig') %}
+
     <h1>Create new UserDetails</h1>
 
     {{ include('user_details/_form.html.twig') }}

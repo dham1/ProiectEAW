@@ -83,12 +83,23 @@ class UserAnimalController extends AbstractController
      */
     public function delete(Request $request, UserAnimal $userAnimal): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$userAnimal->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $userAnimal->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($userAnimal);
             $entityManager->flush();
         }
 
         return $this->redirectToRoute('user_animal_index');
+    }
+
+    /**
+     * @Route("/list/{User}", name="all_animals_per_user", methods={"GET"})
+     */
+    public function animalPerUser(UserAnimalRepository $userAnimalRepository, $User): Response
+    {
+        $animals = $userAnimalRepository->allAnimalsByUser($User);
+        return $this->render('user_animal/show_user_animals.html.twig', [
+            'animals_per_user' => $animals,
+        ]);
     }
 }

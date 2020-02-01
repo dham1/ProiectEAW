@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}UserAnimal index{% endblock %}
+
+{% block body %}
+    {% include('base.html.twig') %}
+
+    <h1>UserAnimal index</h1>
+    <div class="card-deck">
+        {% for user_animal in animals_per_user %}
+
+            <div class="card" style="max-width: 300px;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ user_animal.Animal.Name }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ user_animal.Animal.Type }}</h6>
+                    <a class="btn btn-primary" href="{{ path('animal_show', {'id': user_animal.Animal.id}) }}">View
+                        Details</a>
+                    <a class="btn btn-warning" href="{{ path('animal_edit', {'id': user_animal.Animal.id}) }}">Edit</a>
+                    <a class="btn btn-success" href="{{ path('animal_health_card', {'Animal': user_animal.Animal.id}) }}">See Health Card</a>
+
+                </div>
+
+            </div>
+        {% else %}
+            <h1>no records found</h1>
+        {% endfor %}
+    </div>
+    <a href="{{ path('user_animal_new') }}">Create new</a>
+{% endblock %}
