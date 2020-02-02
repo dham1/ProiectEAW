@@ -207,4 +207,12 @@ class Animal
 
         return $this;
     }
+    public function isValid()
+    {
+        if($this->Name == "" || $this->BirthDate == "" || $this->Type == "" || $this->Breed == "" || $this->Sex == ""||$this->Allergies == ""||$this->Weight == "")
+        {
+            return false;
+        }
+        return true;
+    }
 }
