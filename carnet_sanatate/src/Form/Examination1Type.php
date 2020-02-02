@@ -12,8 +12,13 @@ class Examination1Type extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('Date')
-            ->add('Description')
+            ->add('Date', null,[
+                'required' => true,
+            ])
+            ->add('Description', null,[
+                'required' => true,
+                'max'=>1000
+            ])
             ->add('HealthCard')
         ;
     }

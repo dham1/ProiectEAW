@@ -12,8 +12,12 @@ class HealthCard2Type extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('CardNumber')
-            ->add('Animal')
+            ->add('CardNumber', null,[
+                'required' => true,
+            ])
+            ->add('Animal', null,[
+                'help' => 'DO NOT CHANGE THIS WHEN EDIT. ONLY FOR CREATE',
+            ])
         ;
     }
 

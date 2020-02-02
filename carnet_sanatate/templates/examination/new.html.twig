@@ -4,10 +4,14 @@
 
 {% block body %}
     {% include('base.html.twig') %}
+<div class="container" style="margin-top: 5%">
+    <div style="max-width: 600px">
+        <h1>Create new Examination</h1>
 
-    <h1>Create new Examination</h1>
+        {{ include('examination/_form.html.twig') }}
 
-    {{ include('examination/_form.html.twig') }}
+        <a class="btn btn-info" href="{{ path('all_animals_per_user', {User:app.user.id}) }}">Back</a>
+    </div>
+</div>
 
-    <a href="{{ path('examination_index') }}">back to list</a>
 {% endblock %}

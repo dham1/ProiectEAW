@@ -4,38 +4,43 @@
 
 {% block body %}
     {% include('base.html.twig') %}
+<div class="container" style="margin-top: 5%">
+    <div style="max-width: 900px";>
+        <h1>Examination index</h1>
 
-    <h1>Examination index</h1>
-
-    <table class="table">
-        <thead>
+        <table class="table">
+            <thead>
             <tr>
                 <th>Id</th>
                 <th>Date</th>
                 <th>Description</th>
                 <th>actions</th>
             </tr>
-        </thead>
-        <tbody>
-        {% for examination in health_card_examination %}
-            <tr>
-                <td>{{ examination.id }}</td>
-                <td>{{ examination.Date ? examination.Date|date('Y-m-d') : '' }}</td>
-                <td>{{ examination.Description }}</td>
-                <td>
-                    <a class="btn btn-primary" href="{{ path('examination_show', {'id': examination.id}) }}">show</a>
-                    <a class="btn btn-warning" href="{{ path('examination_edit', {'id': examination.id}) }}">edit</a>
-                    <a class="btn btn-success" href="{{ path('animal_health_card', {'Animal': examination.HealthCard.Animal.id}) }}">Back</a>
+            </thead>
+            <tbody>
+            {% for examination in health_card_examination %}
+                <tr>
+                    <td>{{ examination.id }}</td>
+                    <td>{{ examination.Date ? examination.Date|date('Y-m-d') : '' }}</td>
+                    <td>{{ examination.Description }}</td>
+                    <td>
+                        <a class="btn btn-primary" href="{{ path('examination_show', {'id': examination.id}) }}">show</a>
+                        <a class="btn btn-warning" href="{{ path('examination_edit', {'id': examination.id}) }}">edit</a>
+                        <a class="btn btn-success" href="{{ path('animal_health_card', {'Animal': examination.HealthCard.Animal.id}) }}">Back</a>
 
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="4">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
 
-    <a href="{{ path('examination_new') }}">Create new</a>
+       <h3>Add a new examination using your health card id: <b>{{health_card_id}}</b></h3>
+        <a class="btn btn-info" href="{{ path('examination_new') }}">Create new</a>
+    </div>
+</div>
+
 {% endblock %}

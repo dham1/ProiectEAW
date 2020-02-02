@@ -20,6 +20,8 @@ class HealthCardController extends AbstractController
      */
     public function index(HealthCardRepository $healthCardRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         return $this->render('health_card/index.html.twig', [
             'health_cards' => $healthCardRepository->findAll(),
         ]);
@@ -30,6 +32,8 @@ class HealthCardController extends AbstractController
      */
     public function new(Request $request): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         $healthCard = new HealthCard();
         $form = $this->createForm(HealthCard2Type::class, $healthCard);
         $form->handleRequest($request);
@@ -39,7 +43,7 @@ class HealthCardController extends AbstractController
             $entityManager->persist($healthCard);
             $entityManager->flush();
 
-            return $this->redirectToRoute('health_card_index');
+            return $this->redirectToRoute('dashboard');
         }
 
         return $this->render('health_card/new.html.twig', [
@@ -53,6 +57,8 @@ class HealthCardController extends AbstractController
      */
     public function show(HealthCard $healthCard): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         return $this->render('health_card/show.html.twig', [
             'health_card' => $healthCard,
         ]);
@@ -63,13 +69,15 @@ class HealthCardController extends AbstractController
      */
     public function edit(Request $request, HealthCard $healthCard): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         $form = $this->createForm(HealthCard2Type::class, $healthCard);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('health_card_index');
+            return $this->redirectToRoute('animal_health_card',['Animal'=>$healthCard->getAnimal()->getId()]);
         }
 
         return $this->render('health_card/edit.html.twig', [
@@ -83,13 +91,15 @@ class HealthCardController extends AbstractController
      */
     public function delete(Request $request, HealthCard $healthCard): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         if ($this->isCsrfTokenValid('delete'.$healthCard->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($healthCard);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('health_card_index');
+        return $this->redirectToRoute('dashboard');
     }
 
     /**
@@ -97,9 +107,12 @@ class HealthCardController extends AbstractController
      */
     public function findCardByAnimal(HealthCardRepository $healthCardRepository, $Animal): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         $animal_card = $healthCardRepository->findCardByAnimalId($Animal);
         return $this->render('health_card/show_animal_card.html.twig', [
             'animal_health_card' => $animal_card,
+            'animal_id' => $Animal
         ]);
     }
 }

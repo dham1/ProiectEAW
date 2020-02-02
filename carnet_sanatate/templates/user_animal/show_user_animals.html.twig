@@ -4,8 +4,8 @@
 
 {% block body %}
     {% include('base.html.twig') %}
-
-    <h1>UserAnimal index</h1>
+<div class="container" style="margin-top: 5%">
+    <h1>{{ app.user.username }}'s Animals</h1>
     <div class="card-deck">
         {% for user_animal in animals_per_user %}
 
@@ -25,5 +25,7 @@
             <h1>no records found</h1>
         {% endfor %}
     </div>
-    <a href="{{ path('user_animal_new') }}">Create new</a>
+    <a href="{{ path('animal_new') }}">Add a new animal</a>
+</div>
+
 {% endblock %}

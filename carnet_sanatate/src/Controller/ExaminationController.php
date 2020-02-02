@@ -20,6 +20,8 @@ class ExaminationController extends AbstractController
      */
     public function index(ExaminationRepository $examinationRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         return $this->render('examination/index.html.twig', [
             'examinations' => $examinationRepository->findAll(),
         ]);
@@ -30,6 +32,8 @@ class ExaminationController extends AbstractController
      */
     public function new(Request $request): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         $examination = new Examination();
         $form = $this->createForm(Examination1Type::class, $examination);
         $form->handleRequest($request);
@@ -39,7 +43,7 @@ class ExaminationController extends AbstractController
             $entityManager->persist($examination);
             $entityManager->flush();
 
-            return $this->redirectToRoute('examination_index');
+            return $this->redirectToRoute('health_card_examination',['HealthCard' => $examination->getHealthCard()->getId()]);
         }
 
         return $this->render('examination/new.html.twig', [
@@ -53,6 +57,8 @@ class ExaminationController extends AbstractController
      */
     public function show(Examination $examination): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         return $this->render('examination/show.html.twig', [
             'examination' => $examination,
         ]);
@@ -63,18 +69,21 @@ class ExaminationController extends AbstractController
      */
     public function edit(Request $request, Examination $examination): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         $form = $this->createForm(Examination1Type::class, $examination);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('examination_index');
+            return $this->redirectToRoute('health_card_examination',['HealthCard' => $examination->getHealthCard()->getId()]);
         }
 
         return $this->render('examination/edit.html.twig', [
             'examination' => $examination,
             'form' => $form->createView(),
+            'health_card_id' => $examination->getHealthCard()->getId(),
         ]);
     }
 
@@ -83,13 +92,15 @@ class ExaminationController extends AbstractController
      */
     public function delete(Request $request, Examination $examination): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         if ($this->isCsrfTokenValid('delete'.$examination->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($examination);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('examination_index');
+        return $this->redirectToRoute('dashboard');
     }
 
     /**
@@ -97,9 +108,12 @@ class ExaminationController extends AbstractController
      */
     public function findExaminationsByCard(ExaminationRepository $examinationRepository, $HealthCard): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         $examinations = $examinationRepository->findExaminationsByCardId($HealthCard);
         return $this->render('examination/health_card_examinations.html.twig', [
             'health_card_examination' => $examinations,
+            'health_card_id' =>$HealthCard
         ]);
     }
 }

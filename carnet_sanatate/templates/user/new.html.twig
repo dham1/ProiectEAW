@@ -4,10 +4,14 @@
 
 {% block body %}
     {% include('base.html.twig') %}
+<div class="container" style="margin-top: 5%">
+    <div style="max-width: 600px;">
+        <h1>Create new User</h1>
 
-    <h1>Create new User</h1>
+        {{ include('user/_form.html.twig') }}
 
-    {{ include('user/_form.html.twig') }}
+        <a href="{{ path('user_index') }}">back to list</a>
+    </div>
+</div>
 
-    <a href="{{ path('user_index') }}">back to list</a>
 {% endblock %}

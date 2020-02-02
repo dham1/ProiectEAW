@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * @Route("/user/animal")
@@ -20,6 +21,8 @@ class UserAnimalController extends AbstractController
      */
     public function index(UserAnimalRepository $userAnimalRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         return $this->render('user_animal/index.html.twig', [
             'user_animals' => $userAnimalRepository->findAll(),
         ]);
@@ -30,6 +33,8 @@ class UserAnimalController extends AbstractController
      */
     public function new(Request $request): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         $userAnimal = new UserAnimal();
         $form = $this->createForm(UserAnimalType::class, $userAnimal);
         $form->handleRequest($request);
@@ -39,7 +44,7 @@ class UserAnimalController extends AbstractController
             $entityManager->persist($userAnimal);
             $entityManager->flush();
 
-            return $this->redirectToRoute('user_animal_index');
+            return $this->redirectToRoute('dashboard');
         }
 
         return $this->render('user_animal/new.html.twig', [
@@ -53,6 +58,8 @@ class UserAnimalController extends AbstractController
      */
     public function show(UserAnimal $userAnimal): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         return $this->render('user_animal/show.html.twig', [
             'user_animal' => $userAnimal,
         ]);
@@ -63,6 +70,8 @@ class UserAnimalController extends AbstractController
      */
     public function edit(Request $request, UserAnimal $userAnimal): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         $form = $this->createForm(UserAnimalType::class, $userAnimal);
         $form->handleRequest($request);
 
@@ -83,6 +92,8 @@ class UserAnimalController extends AbstractController
      */
     public function delete(Request $request, UserAnimal $userAnimal): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         if ($this->isCsrfTokenValid('delete' . $userAnimal->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($userAnimal);
@@ -97,6 +108,8 @@ class UserAnimalController extends AbstractController
      */
     public function animalPerUser(UserAnimalRepository $userAnimalRepository, $User): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         $animals = $userAnimalRepository->allAnimalsByUser($User);
         return $this->render('user_animal/show_user_animals.html.twig', [
             'animals_per_user' => $animals,

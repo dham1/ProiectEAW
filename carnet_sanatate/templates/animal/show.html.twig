@@ -4,11 +4,12 @@
 
 {% block body %}
     {% include('base.html.twig') %}
+<div class="container" style="margin-top: 5%">
+    <div style="max-width: 600px">
+        <h1>Animal</h1>
 
-    <h1>Animal</h1>
-
-    <table class="table">
-        <tbody>
+        <table class="table">
+            <tbody>
             <tr>
                 <th>Id</th>
                 <td>{{ animal.id }}</td>
@@ -41,12 +42,16 @@
                 <th>Weight</th>
                 <td>{{ animal.Weight }}</td>
             </tr>
-        </tbody>
-    </table>
+            </tbody>
+        </table>
 
-    <a href="{{ path('animal_index') }}">back to list</a>
 
-    <a href="{{ path('animal_edit', {'id': animal.id}) }}">edit</a>
+        <a class="btn btn-warning" href="{{ path('animal_edit', {'id': animal.id}) }}">Edit</a>
 
-    {{ include('animal/_delete_form.html.twig') }}
+        {{ include('animal/_delete_form.html.twig') }}
+        <a class="btn btn-info" href="{{ path('all_animals_per_user',{User:app.user.id}) }}">Back to list</a>
+
+    </div>
+</div>
+
 {% endblock %}

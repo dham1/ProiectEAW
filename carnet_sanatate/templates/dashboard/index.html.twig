@@ -5,14 +5,16 @@
 {% block body %}
     {% include('base.html.twig') %}
 
+    <div class="container">
+        <h1>Welcome back, {{ app.user.username }}</h1>
 
-    <h1>Welcome back, {{ app.user.username }}</h1>
+        <a href="{{ path('user_show', {id: app.user.id}) }}" id="manageUsers" class="btn btn-warning">Manage your
+            personal information
+        </a>
 
-    <a href="{{ path('user_show', {id: app.user.id}) }}" id="manageUsers" class="btn btn-primary">Manage your
-        personal information
-    </a>
+        <a href="{{ path('all_animals_per_user',{User:app.user.id}) }}" class="btn btn-success">Go To Animals</a>
+    </div>
 
-    <a href="{{ path('all_animals_per_user',{User:app.user.id}) }}" class="btn btn-primary">Go To Animals</a>
 
 {% endblock %}
 

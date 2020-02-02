@@ -4,34 +4,44 @@
 
 {% block body %}
     {% include('base.html.twig') %}
+    <div class="container" style="margin-top: 5%">
+        <div style="max-width: 600px">
+            <h1>Show this health card to the vet, he will get your Health Card Number</h1>
+            <hr>
 
-    <h1>Show this health card to the vet, he will get your Health Card Number</h1>
+            {% for health_card in animal_health_card %}
+                <div class="card border-success mb-3" style="max-width: 400px;">
+                    <div class="card-header bg-transparent border-success">{{ health_card.Animal.Name }}'s Health Card
+                    </div>
+                    <div class="card-body text-success">
 
+                        <h5 class="card-title">Health Card No.: {{ health_card.CardNumber }}</h5>
+                        <p class="card-text">id: {{ health_card.id }}</p>
+                        <p class="card-text">Type: {{ health_card.Animal.Type }}</p>
+                        <p class="card-text">Breed: {{ health_card.Animal.Breed }}</p>
+                        <p class="card-text">Allergies: {{ health_card.Animal.Allergies }}</p>
+                    </div>
+                    <div class="card-footer bg-transparent border-success">
+                        <a class="btn btn-warning"
+                           href="{{ path('health_card_edit', {'id': health_card.id}) }}">Edit</a>
+                        <a class="btn btn-success" href="{{ path('health_card_examination', {'HealthCard': health_card.id}) }}">Check
+                            examinations</a>
+                        <a class="btn btn-primary" href="{{ path('animal_show', {'id': health_card.Animal.id}) }}">Animal
+                            Details</a>
+                        <a class="btn btn-info"
+                           href="{{ path('all_animals_per_user', {'User': app.user.id }) }}">Back</a>
 
-    {% for health_card in animal_health_card %}
-        <div class="card border-success mb-3" style="max-width: 400px;">
-            <div class="card-header bg-transparent border-success">{{ health_card.Animal.Name }}'s Health Card</div>
-            <div class="card-body text-success">
+                    </div>
 
-                <h5 class="card-title">Health Card No.: {{ health_card.CardNumber }}</h5>
-                <p class="card-text">id: {{ health_card.id }}</p>
-                <p class="card-text">Type: {{ health_card.Animal.Type }}</p>
-                <p class="card-text">Breed: {{health_card.Animal.Breed}}</p>
-                <p class="card-text">Allergies: {{health_card.Animal.Allergies}}</p>
-            </div>
-            <div class="card-footer bg-transparent border-success">
-                <a class="btn btn-warning" href="{{ path('health_card_edit', {'id': health_card.id}) }}">Edit</a>
-                <a class="btn btn-success" href="{{ path('health_card_edit', {'id': health_card.id}) }}">Check examinations</a>
-                <a class="btn btn-primary" href="{{ path('health_card_edit', {'id': health_card.id}) }}">Animal Details</a>
-                <a class="btn btn-primary" href="{{ path('health_card_edit', {'id': health_card.id}) }}">Back</a>
+                </div>
 
-            </div>
-
+            {% else %}
+                <h2>You have no health card set up yet</h2>
+                <h3> Please click on the button to setup with this animal id: {{ animal_id }} </h3>
+                <a class="btn btn-warning" href="{{ path('health_card_new') }}">Set up health card</a>
+            {% endfor %}
         </div>
+    </div>
 
-    {% else %}
-        <h2>no records found</h2>
-    {% endfor %}
 
-{#    <a href="{{ path('health_card_new') }}">Create new</a>#}
 {% endblock %}

@@ -4,10 +4,14 @@
 
 {% block body %}
     {% include('base.html.twig') %}
-
-    <h1>Create new UserAnimal</h1>
+<div class="container" style="margin-top: 5%">
+    <h1>Link the animal to your account</h1>
+    <h3>Your user id is : {{ app.user.id }}</h3>
+    <h3>Your animal id that you just created is the last one in list</h3>
 
     {{ include('user_animal/_form.html.twig') }}
 
-    <a href="{{ path('user_animal_index') }}">back to list</a>
+    <a class="btn btn-info" href="{{ path('user_animal_index') }}">back to list</a>
+</div>
+
 {% endblock %}

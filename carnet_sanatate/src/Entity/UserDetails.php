@@ -126,4 +126,13 @@ class UserDetails
     public function __toString() {
         return (string)$this->getId();
     }
+
+    public function isValid()
+    {
+        if($this->FirstName == "" || $this->LastName == "" || $this->BirthDate == "" || $this->Address == "" || $this->Phone == "")
+        {
+            return false;
+        }
+        return true;
+    }
 }

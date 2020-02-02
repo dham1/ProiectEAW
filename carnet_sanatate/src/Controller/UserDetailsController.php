@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\UserDetails;
 use App\Form\UserDetails2Type;
+use App\Form\UserDetailsType;
 use App\Repository\UserDetailsRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,6 +21,8 @@ class UserDetailsController extends AbstractController
      */
     public function index(UserDetailsRepository $userDetailsRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         return $this->render('user_details/index.html.twig', [
             'user_details' => $userDetailsRepository->findAll(),
         ]);
@@ -30,6 +33,8 @@ class UserDetailsController extends AbstractController
      */
     public function new(Request $request): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         $userDetail = new UserDetails();
         $form = $this->createForm(UserDetails2Type::class, $userDetail);
         $form->handleRequest($request);
@@ -53,6 +58,8 @@ class UserDetailsController extends AbstractController
      */
     public function show(UserDetails $userDetail): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         return $this->render('user_details/show.html.twig', [
             'user_detail' => $userDetail,
         ]);
@@ -63,7 +70,9 @@ class UserDetailsController extends AbstractController
      */
     public function edit(Request $request, UserDetails $userDetail): Response
     {
-        $form = $this->createForm(UserDetails2Type::class, $userDetail);
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
+        $form = $this->createForm(UserDetailsType::class, $userDetail);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -83,6 +92,8 @@ class UserDetailsController extends AbstractController
      */
     public function delete(Request $request, UserDetails $userDetail): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         if ($this->isCsrfTokenValid('delete'.$userDetail->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($userDetail);

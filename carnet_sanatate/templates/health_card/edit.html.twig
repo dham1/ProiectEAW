@@ -4,12 +4,17 @@
 
 {% block body %}
     {% include('base.html.twig') %}
+<div class="container" style="margin-top: 5%">
+    <div style="max-font-size: 600px">
+        <h1>Edit HealthCard</h1>
 
-    <h1>Edit HealthCard</h1>
+        {{ include('health_card/_form.html.twig', {'button_label': 'Update'}) }}
 
-    {{ include('health_card/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('health_card_index') }}">back to list</a>
+        {{ include('health_card/_delete_form.html.twig') }}
+        <a class="btn btn-info" href="{{ path('animal_health_card',{Animal: health_card.Animal.id}) }}">Back to list</a>
+    </div>
+</div>
 
-    {{ include('health_card/_delete_form.html.twig') }}
+
 {% endblock %}
