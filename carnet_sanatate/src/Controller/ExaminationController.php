@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Examination;
 use App\Form\Examination1Type;
+use App\Helpers\ZendLuceneSearch;
 use App\Repository\ExaminationRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -43,7 +45,7 @@ class ExaminationController extends AbstractController
             $entityManager->persist($examination);
             $entityManager->flush();
 
-            return $this->redirectToRoute('health_card_examination',['HealthCard' => $examination->getHealthCard()->getId()]);
+            return $this->redirectToRoute('health_card_examination', ['HealthCard' => $examination->getHealthCard()->getId()]);
         }
 
         return $this->render('examination/new.html.twig', [
@@ -77,7 +79,7 @@ class ExaminationController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('health_card_examination',['HealthCard' => $examination->getHealthCard()->getId()]);
+            return $this->redirectToRoute('health_card_examination', ['HealthCard' => $examination->getHealthCard()->getId()]);
         }
 
         return $this->render('examination/edit.html.twig', [
@@ -94,7 +96,7 @@ class ExaminationController extends AbstractController
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
 
-        if ($this->isCsrfTokenValid('delete'.$examination->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $examination->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($examination);
             $entityManager->flush();
@@ -113,7 +115,34 @@ class ExaminationController extends AbstractController
         $examinations = $examinationRepository->findExaminationsByCardId($HealthCard);
         return $this->render('examination/health_card_examinations.html.twig', [
             'health_card_examination' => $examinations,
-            'health_card_id' =>$HealthCard
+            'health_card_id' => $HealthCard
+        ]);
+    }
+
+    /**
+     * @Route("/search/{HealthCard}", name="examination_search", methods={"POST"})
+     */
+    public function search(ExaminationRepository $examinationRepository, $HealthCard): Response
+    {
+        $allExaminations = $examinationRepository->findAll();
+        foreach ($allExaminations as $examination) {
+            ZendLuceneSearch::updateLuceneIndex($examination);
+        }
+
+        $searchTerm = $_POST["searchTerm"];
+        $hits = ZendLuceneSearch::getLuceneIndex()->find($searchTerm);
+
+        $results = new ArrayCollection();
+        foreach ($hits as $hit) {
+            $document = $hit->getDocument();
+            $res = $examinationRepository->find($document->key);
+            $results->add($res);
+        }
+
+        return $this->render('examination/health_card_examinations.html.twig', [
+            'health_card_examination' => $results,
+            'health_card_id' => $HealthCard,
+
         ]);
     }
 }

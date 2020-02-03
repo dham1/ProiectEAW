@@ -17,7 +17,6 @@ class Examination1Type extends AbstractType
             ])
             ->add('Description', null,[
                 'required' => true,
-                'max'=>1000
             ])
             ->add('HealthCard')
         ;
