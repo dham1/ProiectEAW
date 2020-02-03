@@ -5,6 +5,9 @@ namespace App\Helpers;
 require_once(dirname(__FILE__) . '../../../autoload.php');
 
 use App\Entity\Examination;
+use App\Entity\Animal;
+
+use App\Entity\UserAnimal;
 use Zend_Search_Lucene;
 use Zend_Search_Lucene_Document;
 use Zend_Search_Lucene_Field;
@@ -56,6 +59,23 @@ class ZendLuceneSearch
         $doc = new Zend_Search_Lucene_Document();
         $doc -> addField(Zend_Search_Lucene_Field::Keyword('key', $examination -> getId()));
         $doc -> addField(Zend_Search_Lucene_Field::Text('description', $examination -> getDescription(), 'utf-8'));
+
+        $index -> addDocument($doc);
+        $index -> commit();
+    }
+
+    public function updateLuceneAnimalIndex(UserAnimal $animal)
+    {
+        $index = self::getLuceneIndex();
+
+        foreach ($index -> find('key:'.$animal -> getId()) as $hit)
+        {
+            $index -> delete($hit -> id);
+        }
+
+        $doc = new Zend_Search_Lucene_Document();
+        $doc -> addField(Zend_Search_Lucene_Field::Keyword('key', $animal -> getId()));
+        $doc -> addField(Zend_Search_Lucene_Field::Text('Name', $animal ->getAnimal()->getName(), 'utf-8'));
 
         $index -> addDocument($doc);
         $index -> commit();

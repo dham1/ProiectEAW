@@ -4,7 +4,10 @@ namespace App\Controller;
 
 use App\Entity\UserAnimal;
 use App\Form\UserAnimalType;
+use App\Helpers\ZendLuceneSearch;
+use App\Repository\AnimalRepository;
 use App\Repository\UserAnimalRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -113,6 +116,32 @@ class UserAnimalController extends AbstractController
         $animals = $userAnimalRepository->allAnimalsByUser($User);
         return $this->render('user_animal/show_user_animals.html.twig', [
             'animals_per_user' => $animals,
+        ]);
+    }
+
+    /**
+     * @Route("/search/{User}", name="animal_search", methods={"POST"})
+     */
+    public function search(UserAnimalRepository $animalRepository, $User): Response
+    {
+        $allAnimals = $animalRepository->allAnimalsByUser($User);
+        foreach ($allAnimals as $animal) {
+            ZendLuceneSearch::updateLuceneAnimalIndex($animal);
+        }
+
+        $searchTerm = $_POST["searchTerm"];
+        $hits = ZendLuceneSearch::getLuceneIndex()->find($searchTerm);
+
+        $results = new ArrayCollection();
+        foreach ($hits as $hit) {
+            $document = $hit->getDocument();
+            $res = $animalRepository->find($document->key);
+            $results->add($res);
+        }
+
+        return $this->render('user_animal/show_user_animals.html.twig', [
+            'animals_per_user' => $results,
+
         ]);
     }
 }
