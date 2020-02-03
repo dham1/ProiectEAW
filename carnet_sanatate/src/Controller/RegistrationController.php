@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\User;
+
 use App\Form\RegistrationFormType;
+use App\Helpers\SendEmailHelper;
 use App\Security\LoginFormAuthenticator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,6 +41,12 @@ class RegistrationController extends AbstractController
             $entityManager->flush();
 
             // do anything else you need here, like send an email
+            $emailSender = new SendEmailHelper();
+            $displayName = $user->getUsername();
+            $subject = "Welcome to Animal Health Card";
+            $content = "Welcome!<br> You are registered successfully! <br> Your username is: <b>".$displayName."</b><br> To check your account click <a href='http://localhost:8000/dashboard'>here</a>";
+            $emailSender->sendMail($user->getEmail(),$displayName,$subject,$content);
+
 
             return $guardHandler->authenticateUserAndHandleSuccess(
                 $user,
